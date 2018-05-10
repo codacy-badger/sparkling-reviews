@@ -1,4 +1,4 @@
-package reviews.analysis.constants
+package sparkling.reviews.constants
 
 object StringConstants {
 

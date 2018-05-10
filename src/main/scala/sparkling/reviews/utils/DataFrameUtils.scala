@@ -1,15 +1,31 @@
-package reviews.analysis.utils
+package sparkling.reviews.utils
+
+/**
+  * Copyright 2018 Pratik Barhate
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing,
+  * software distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf
-import reviews.analysis.constants.RegexExpressions._
-import reviews.analysis.constants.StringConstants._
+import sparkling.reviews.constants.RegexExpressions._
+import sparkling.reviews.constants.StringConstants._
 
 /**
   * A static class to hold all the DataFrame UDFs and some common functions
   */
-private[analysis] object DataFrameUtils {
+private[sparkling] object DataFrameUtils {
 
   /**
     * Custom UDF for parsing raw text data and extract required data.
@@ -35,7 +51,7 @@ private[analysis] object DataFrameUtils {
     *
     * @return [[String]] - sentiment (positive or negative)
     */
-  def getSingleSentimentStrJSL: UserDefinedFunction =
+  def getSingleSentimentStr: UserDefinedFunction =
     udf((input: Seq[Row]) => {
       input
         .map(x => (x.getInt(2) - x.getInt(1), x.getString(3)))
@@ -47,7 +63,7 @@ private[analysis] object DataFrameUtils {
     *
     * @return [[Double]] 1.0 for positive sentiment and -1.0 for a negative one
     */
-  def getSentimentValueJSL: UserDefinedFunction =
+  def getSentimentValue: UserDefinedFunction =
     udf((input: String) => {
       input match {
         case "positive" => 1.0
@@ -61,7 +77,7 @@ private[analysis] object DataFrameUtils {
     *
     * @return [[List]] of [[String]] which represents distinct key words of the review.
     */
-  def getImportantWordsJSL: UserDefinedFunction =
+  def getImportantWords: UserDefinedFunction =
     udf((stemList: Seq[Row], posList: Seq[Row]) => {
       val nounWordList = posList.filter(x => x.getString(3).matches("NN|NNS|NNP|NNPS"))
       val indices = nounWordList.map(posList.indexOf(_))

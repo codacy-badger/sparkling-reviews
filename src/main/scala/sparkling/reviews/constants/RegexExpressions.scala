@@ -1,10 +1,10 @@
-package reviews.analysis.constants
+package sparkling.reviews.constants
 
-import reviews.analysis.constants.StringConstants.EndLineChar
+import StringConstants.EndLineChar
 
 import scala.util.matching.Regex
 
-private[analysis] object RegexExpressions {
+private[sparkling] object RegexExpressions {
 
   final val extraWhiteSpaceRegex: Regex = "\\s+".r
   final val nonAlphaNumericWithSpaceRegex: Regex = "[^0-9a-zA-Z,?!\\s]".r

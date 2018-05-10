@@ -1,4 +1,4 @@
-package reviews.analysis.constants
+package sparkling.reviews.constants
 
 object DataConstants {
 
@@ -19,6 +19,8 @@ object DataConstants {
   final val CleanText: String = "clean_text"
   final val SentimentValue: String = "sentiment_value"
   final val SentimentFactor: String = "sentiment_factor"
+  final val SentimentCount = "sentiment_count"
+  final val AllSentimentsCounts: String = "all_sentiment_counts"
   final val KeyWords: String = "key_words"
 
   /**
