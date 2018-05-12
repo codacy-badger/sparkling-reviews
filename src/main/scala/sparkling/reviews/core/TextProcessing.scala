@@ -20,7 +20,7 @@ import com.johnsnowlabs.nlp.pretrained.pipelines.en.{AdvancedPipeline, Sentiment
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 import sparkling.reviews.constants.DataConstants._
-import sparkling.reviews.utils.DataFrameUtils.{getImportantWords, getSentimentValue, getSingleSentimentStr}
+import sparkling.reviews.utils.DataFrameUDFs.{getImportantWords, getSentimentValue, getSingleSentimentStr}
 
 private[core] object TextProcessing {
 
@@ -55,8 +55,8 @@ private[core] object TextProcessing {
   def getKeyWords(df: DataFrame, inputColName: String): DataFrame = {
     AdvancedPipeline().annotate(df, inputColName)
       .withColumnRenamed(TextColumnJSL, CleanText)
-      .withColumn(KeyWords, getImportantWords(col(StemJSL), col(PosJSL)))
-      .select(ProductID, Rating, SentimentsJSL, SentimentValue, KeyWords)
+      .withColumn(ReviewKeyWords, getImportantWords(col(StemJSL), col(PosJSL)))
+      .select(ProductID, Rating, SentimentsJSL, SentimentValue, ReviewKeyWords)
   }
 
 }

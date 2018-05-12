@@ -23,9 +23,9 @@ import sparkling.reviews.constants.RegexExpressions._
 import sparkling.reviews.constants.StringConstants._
 
 /**
-  * A static class to hold all the DataFrame UDFs and some common functions
+  * A static class to hold all the DataFrame UDFs.
   */
-private[sparkling] object DataFrameUtils {
+private[sparkling] object DataFrameUDFs {
 
   /**
     * Custom UDF for parsing raw text data and extract required data.
@@ -79,7 +79,7 @@ private[sparkling] object DataFrameUtils {
     */
   def getImportantWords: UserDefinedFunction =
     udf((stemList: Seq[Row], posList: Seq[Row]) => {
-      val nounWordList = posList.filter(x => x.getString(3).matches("NN|NNS|NNP|NNPS"))
+      val nounWordList = posList.filter(x => x.getString(3).matches(NounFormsStrExpr))
       val indices = nounWordList.map(posList.indexOf(_))
       val requiredLemmaList = stemList.filter(x => indices.contains(stemList.indexOf(x)))
       requiredLemmaList
@@ -98,7 +98,7 @@ private[sparkling] object DataFrameUtils {
     *
     * @return [[Double]] Sentiment Factor
     */
-  def sentimentFactor: UserDefinedFunction =
+  def getSentimentFactor: UserDefinedFunction =
     udf((value: Double, userRating: Double, maxRating: Double) => {
       value match {
         case x if x < 0 =>
@@ -108,6 +108,16 @@ private[sparkling] object DataFrameUtils {
           val multiplicationFactor = userRating / maxRating
           multiplicationFactor * value
       }
+    })
+
+  /**
+    * Finds which sentiment has the highest count.
+    *
+    * @return [[String]] sentiment with the highest count.
+    */
+  def getProductSentiment: UserDefinedFunction =
+    udf((input: Seq[Seq[String]]) => {
+      input.map(x => (x.head, x.last.toLong)).maxBy(_._2)._1
     })
 
 }

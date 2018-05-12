@@ -27,7 +27,6 @@ private[sparkling] object SessionFactory {
     */
   private final lazy val sparkSession: SparkSession = SparkSession.builder()
     .appName("ProductReviewAnalysis")
-    .enableHiveSupport()
     .getOrCreate()
 
   /**
@@ -35,6 +34,6 @@ private[sparkling] object SessionFactory {
     *
     * @return [[SparkSession]]
     */
-  def getSparkSession: SparkSession = sparkSession
+  def getSparkSessionInstance: SparkSession = sparkSession
 
 }

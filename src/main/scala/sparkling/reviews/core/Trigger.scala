@@ -16,9 +16,12 @@ package sparkling.reviews.core
   * limitations under the License.
   */
 
-import org.apache.log4j.{Level, LogManager, Logger}
+import java.time.Instant
+import java.util.concurrent.TimeUnit
 
-object Trigger extends {
+import sparkling.reviews.utils.Logs
+
+object Trigger extends Logs {
 
   /**
     * Main function which is the starting point for the application.
@@ -27,24 +30,32 @@ object Trigger extends {
     */
   def main(args: Array[String]): Unit = {
 
-    /**
-      * Manage logging so that is does not blots out the standard output.
-      * Setting the applications logging level to warning.
-      */
-    val log: Logger = LogManager.getRootLogger
-    Logger.getLogger("org").setLevel(Level.ERROR)
-    Logger.getLogger("reviews.analysis").setLevel(Level.WARN)
+    val startTime: Long = Instant.now().toEpochMilli
 
-    if (args.length != 1) {
-      log.error(s"Review Analysis :: ${args.length} number of arguments passed. Expected 1 :- \n" +
-        s"Review Analysis :: 1. Data path\n")
+    /**
+      * NOTE:
+      * Main memory allocated to the application should be 3.5 * (Data Size).
+      * If the data size is 4500 MB then the combined memory allocated to the
+      * application should be 15750 MB = 15.75 GB.
+      */
+    if (args.length != 2) {
+      log.error(s"Review Analysis :: Number of arguments provided ${args.length}. But expected 2 :- \n" +
+        s"Review Analysis :: 1. Data input path\n" +
+        s"Review Analysis :: 2. Result output path\n")
       sys.exit(1)
     } else {
       val dataPath: String = args(0)
+      val resultPath: String = args(1)
       // Start the data processing
-      val dataFlow = DataFlow(dataPath)
+      val dataFlow = DataFlow(dataPath, resultPath)
       dataFlow.execute()
     }
+    val endTime: Long = Instant.now().toEpochMilli
+    val totalTime: Long = endTime - startTime
+    val hours: Long = TimeUnit.MILLISECONDS.toHours(totalTime)
+    val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(totalTime) - TimeUnit.HOURS.toMinutes(hours)
+    val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(totalTime) - TimeUnit.MINUTES.toSeconds(minutes)
+    log.info(s"Review Analysis :: Total time taken is $hours:$minutes:$seconds (hours:minutes:seconds).")
   }
 
 }

@@ -16,8 +16,8 @@ package sparkling.reviews.core
   * limitations under the License.
   */
 
-import org.apache.spark.sql.DataFrame
 import sparkling.reviews.constants.DataConstants._
+import sparkling.reviews.utils.IOFunctions._
 
 /**
   * Class to manage the data processes in sequence
@@ -27,42 +27,35 @@ import sparkling.reviews.constants.DataConstants._
   *
   * @param dataPath Path of the data
   */
-private[core] case class DataFlow(dataPath: String) {
+private[core] case class DataFlow(dataPath: String,
+                                  resultPath: String) {
 
   /**
     * This is the data flow of the application.
     * The steps after loading the data are:-
     * 1. Clean the text of some unwanted chars and string formats.
-    * 2. Use JohnSnowLabs pre-trained sentiment prediction model to get the sentiments.
+    * 2. Use JohnSnowLabs pre-trained sentiment prediction pipeline to get the sentiments.
     * 3. Use JohnSnowLabs pre-trained `AdvancedPipeline` to get the key words.
     * 4. Calculate the sentiment factor using the rating given by the user.
+    * 5. Get all to computed aggregated to a product level.
+    * 6. Write the computed result to a given location on to a secondary memory.
+    *
+    *
+    * Reason for doing `count` operation on `sentimentFactorDF`:-
+    * Caching the computed data up to "sentimentFactorDF" will speed up the
+    * further process as the DAG for the same will be computed only once.
+    * And the data is not cached until an action come in picture.
     */
   def execute(): Unit = {
 
-    val rawDF = loadData
+    val rawDF = loadData(dataPath)
     val cleanDF = DataProcessing.preProcessing(rawDF)
     val sentimentDF = TextProcessing.tagStringWithSentiments(cleanDF, CombinedText)
     val keyWordsSentimentDF = TextProcessing.getKeyWords(sentimentDF, CleanText)
-    /**
-      * If you have main memory (RAM) more than the data size.
-      *
-      * Comment the line just after this comment which holds `sentimentFactorDF` and
-      * un-comment the similar lines below which caches the DataFrame and perform count on it,
-      * this will speed up the further processes.
-      */
-    val sentimentFactorDF = DataProcessing.calSentimentFactor(keyWordsSentimentDF)
-//    val sentimentFactorDF = DataProcessing.calSentimentFactor(keyWordsSentimentDF).cache
-//    sentimentFactorDF.count
-    sentimentFactorDF.printSchema()
-  }
-
-  /**
-    * Load the raw data from the DFS or local FS
-    *
-    * @return [[DataFrame]]
-    */
-  private def loadData: DataFrame = {
-    SessionFactory.getSparkSession.read.parquet(dataPath)
+    val sentimentFactorDF = DataProcessing.calSentimentFactor(keyWordsSentimentDF).cache
+    sentimentFactorDF.count
+    val productSentimentInsights = DataProcessing.aggregateToProductLevel(sentimentFactorDF)
+    writeData(productSentimentInsights, resultPath)
   }
 
 }

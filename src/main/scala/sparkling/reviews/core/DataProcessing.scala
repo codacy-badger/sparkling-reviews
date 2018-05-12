@@ -20,7 +20,8 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 import sparkling.reviews.constants.DataConstants._
 import sparkling.reviews.constants.StringConstants.SingleWhiteSpace
-import sparkling.reviews.utils.DataFrameUtils.{cleanReviews, sentimentFactor}
+import sparkling.reviews.utils.DataFrameUDFs._
+import sparkling.reviews.utils.SQLOperations._
 
 private[core] object DataProcessing {
 
@@ -56,8 +57,45 @@ private[core] object DataProcessing {
     */
   def calSentimentFactor(df: DataFrame): DataFrame = {
 
-    df.withColumn(SentimentFactor, sentimentFactor(col(SentimentValue), col(Rating), lit(MaxRating)))
+    df.withColumn(SentimentFactor, getSentimentFactor(col(SentimentValue), col(Rating), lit(MaxRating)))
       .drop(SentimentValue, Rating)
+  }
+
+  /**
+    * This method aggregate the various properties to product level.
+    * 1. Find the overall sentiment by computing which occurred maximum number of times.
+    * 2. Sum the sentiment factor for each product.
+    * 3. Find the 10 best possible words to describe the base for the given sentiment.
+    *
+    * @param df Data with key words, sentiment, and sentiment factor calculate at each row level.
+    * @return [[DataFrame]] All the properties aggregate to the product level.
+    */
+  def aggregateToProductLevel(df: DataFrame): DataFrame = {
+
+    val productSentimentDF = df.groupBy(ProductID, SentimentsJSL)
+      .agg(count(SentimentFactor) as SentimentCount)
+      .withColumn(SentimentCountTuple, array(SentimentsJSL, SentimentCount))
+      .groupBy(ProductID)
+      .agg(collect_list(SentimentCountTuple) as SentimentCountCollection)
+      .withColumn(ProductSentiment, getProductSentiment(col(SentimentCountCollection)))
+      .drop(SentimentCountCollection)
+
+    val productSentimentFactorDF = df.groupBy(ProductID)
+      .agg(sum(col(SentimentFactor)) as ProductSentimentFactor)
+
+    val productKeyWordsDF = df.select(ProductID, ReviewKeyWords)
+      .withColumn(ProductWordExploded, explode(col(ReviewKeyWords)))
+      .withColumn(ProductWordCount, sum(lit(1)).over(getProductWordCountWindow))
+      .groupBy(ProductID, ProductWordExploded)
+      .agg(max(ProductWordCount))
+      .withColumn(ProductWordRank, row_number().over(getProductWordRankWindow))
+      .where(col(ProductWordRank) < 11)
+      .drop(ProductWordRank, ProductWordCount)
+
+    val resultDF = productSentimentDF.join(productSentimentFactorDF, ProductID)
+      .join(productKeyWordsDF, ProductID)
+
+    resultDF
   }
 
 }
