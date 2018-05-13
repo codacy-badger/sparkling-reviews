@@ -30,7 +30,7 @@ for `spark.memory.fraction` and `spark.memory.storageFraction`. Hence if the dat
 (from where you can execute `apache spark` commands).
 3. Spark command structure to execute the application:-
 
-        ```
+        
         spark-submit --class sparkling.reviews.core.Trigger \
         --master ${master_you_want} \
         --conf ${spark conf 1} \
@@ -40,7 +40,7 @@ for `spark.memory.fraction` and `spark.memory.storageFraction`. Hence if the dat
         sparkling-reviews-0.1.jar \
         ${input_data_path}
         ${path_to_store_the_results}
-        ```
+        
 
 ### License
 
