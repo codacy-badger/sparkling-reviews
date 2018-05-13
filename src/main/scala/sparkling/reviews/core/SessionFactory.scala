@@ -25,7 +25,7 @@ private[sparkling] object SessionFactory {
     * This static class helps in ensuring there is
     * only one instance of [[SparkSession]].
     */
-  private final lazy val sparkSession: SparkSession = SparkSession.builder()
+  private lazy val sparkSession: SparkSession = SparkSession.builder()
     .appName("ProductReviewAnalysis")
     .getOrCreate()
 
