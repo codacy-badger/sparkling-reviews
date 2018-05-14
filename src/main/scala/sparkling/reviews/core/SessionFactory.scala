@@ -18,7 +18,7 @@ package sparkling.reviews.core
 
 import org.apache.spark.sql.SparkSession
 
-private[sparkling] object SessionFactory {
+private[reviews] object SessionFactory {
 
   /**
     * Initialize the spark session.

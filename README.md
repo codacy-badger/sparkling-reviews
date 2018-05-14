@@ -23,7 +23,7 @@ only 1 year of data (of 2014 only) with few columns renamed. The filtered data c
 ### Execution
 
 1. Memory requirement - If your data is of size `x`, then the memory allocated to the application should be `3.5 * x`.
-This calculation is done on basis of the spark [default configuration](https://people.apache.org/~pwendell/spark-nightly/spark-master-docs/latest/configuration.html)
+This calculation is done on basis of the [spark default configuration](https://people.apache.org/~pwendell/spark-nightly/spark-master-docs/latest/configuration.html)
 for `spark.memory.fraction` and `spark.memory.storageFraction`. Hence if the data size is 4500 MB, then main memory 
 (Combined / Virtual memory - while executing on distributed systems) allocation to the application should be 15750 MB = 15.75 GB.
 2. Pick up the jar file `sparkling-reviews-0.1.jar`, and place it in the favourable location 

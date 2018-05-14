@@ -87,7 +87,7 @@ private[core] object DataProcessing {
       .withColumn(ProductWordExploded, explode(col(ReviewKeyWords)))
       .withColumn(ProductWordCount, sum(lit(1)).over(getProductWordCountWindow))
       .groupBy(ProductID, ProductWordExploded)
-      .agg(max(ProductWordCount))
+      .agg(max(ProductWordCount) as ProductWordCount)
       .withColumn(ProductWordRank, row_number().over(getProductWordRankWindow))
       .where(col(ProductWordRank) < 11)
       .drop(ProductWordRank, ProductWordCount)

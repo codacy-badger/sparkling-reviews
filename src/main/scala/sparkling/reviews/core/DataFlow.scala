@@ -18,6 +18,7 @@ package sparkling.reviews.core
 
 import sparkling.reviews.constants.DataConstants._
 import sparkling.reviews.utils.IOFunctions._
+import sparkling.reviews.utils.Logs
 
 /**
   * Class to manage the data processes in sequence
@@ -28,7 +29,7 @@ import sparkling.reviews.utils.IOFunctions._
   * @param dataPath Path of the data
   */
 private[core] case class DataFlow(dataPath: String,
-                                  resultPath: String) {
+                                  resultPath: String) extends Logs {
 
   /**
     * This is the data flow of the application.
@@ -48,14 +49,18 @@ private[core] case class DataFlow(dataPath: String,
     */
   def execute(): Unit = {
 
+    log.info(s"Review Analysis :: Data processing started.")
     val rawDF = loadData(dataPath)
     val cleanDF = DataProcessing.preProcessing(rawDF)
     val sentimentDF = TextProcessing.tagStringWithSentiments(cleanDF, CombinedText)
     val keyWordsSentimentDF = TextProcessing.getKeyWords(sentimentDF, CleanText)
     val sentimentFactorDF = DataProcessing.calSentimentFactor(keyWordsSentimentDF).cache
     sentimentFactorDF.count
+    log.info(s"Review Analysis :: Per review, computation is done.")
+    log.info(s"Review Analysis :: Product level aggregations started.")
     val productSentimentInsights = DataProcessing.aggregateToProductLevel(sentimentFactorDF)
     writeData(productSentimentInsights, resultPath)
+    log.info(s"Review Analysis :: All processes are done.")
   }
 
 }

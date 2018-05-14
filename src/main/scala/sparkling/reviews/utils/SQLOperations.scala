@@ -45,6 +45,5 @@ private[sparkling] object SQLOperations {
     */
   def getProductWordRankWindow: WindowSpec =
     Window.partitionBy(ProductID).orderBy(col(ProductWordCount).desc)
-      .rangeBetween(Window.unboundedPreceding, Window.currentRow)
 
 }
