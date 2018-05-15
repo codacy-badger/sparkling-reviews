@@ -48,9 +48,9 @@ private[core] object TextProcessing {
     * This method uses the pre-trained model from John Snow Labs,
     * for tagging the words with POS (Part of Speech) and also their Lemma form.
     *
-    * @param df           DataFrame for which we want to basic NLP tags of each word
-    * @param inputColName Column in which the string under observation is present
-    * @return
+    * @param df           DataFrame for which we want to basic NLP tags of each word.
+    * @param inputColName Column in which the string under observation is present.
+    * @return [[DataFrame]] With key words for each of the reviews.
     */
   def getKeyWords(df: DataFrame, inputColName: String): DataFrame = {
     AdvancedPipeline().annotate(df, inputColName)

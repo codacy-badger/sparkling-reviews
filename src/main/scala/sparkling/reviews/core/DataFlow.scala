@@ -55,6 +55,7 @@ private[core] case class DataFlow(dataPath: String,
     val sentimentDF = TextProcessing.tagStringWithSentiments(cleanDF, CombinedText)
     val keyWordsSentimentDF = TextProcessing.getKeyWords(sentimentDF, CleanText)
     val sentimentFactorDF = DataProcessing.calSentimentFactor(keyWordsSentimentDF).cache
+    log.info(s"Review Analysis :: Caching (save) intermediate data, to avoid multiple execution of a DAG.")
     sentimentFactorDF.count
     log.info(s"Review Analysis :: Per review, computation is done.")
     log.info(s"Review Analysis :: Product level aggregations started.")
