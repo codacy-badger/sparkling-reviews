@@ -3,7 +3,8 @@
 An application to analyse the user reviews about a product to find the sentiments and to extract some particular 
 attributes so as to define some base for the user construe about the product.
 
-**Currently facing low-performance issues. Reason for the same might be something related to [spark-nlp](https://github.com/JohnSnowLabs/spark-nlp)**
+**Currently facing low-performance issues (EXECUTION IS NOT COMPLETING). Number of issues like GC overhead exceeded, and RPC runtime connection failed. 
+Reason for the same might be something related to [spark-nlp](https://github.com/JohnSnowLabs/spark-nlp)**
 
 ### Dependencies
 

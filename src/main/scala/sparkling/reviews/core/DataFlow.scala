@@ -49,19 +49,19 @@ private[core] case class DataFlow(dataPath: String,
     */
   def execute(): Unit = {
 
-    log.info(s"Review Analysis :: Data processing started.")
+    log.info(s"Data processing started.")
     val rawDF = loadData(dataPath)
     val cleanDF = DataProcessing.preProcessing(rawDF)
     val sentimentDF = TextProcessing.tagStringWithSentiments(cleanDF, CombinedText)
     val keyWordsSentimentDF = TextProcessing.getKeyWords(sentimentDF, CleanText)
     val sentimentFactorDF = DataProcessing.calSentimentFactor(keyWordsSentimentDF).cache
-    log.info(s"Review Analysis :: Caching (save) intermediate data, to avoid multiple execution of a DAG.")
+    log.info(s"Caching (save) intermediate data, to avoid multiple execution of a DAG.")
     sentimentFactorDF.count
-    log.info(s"Review Analysis :: Per review, computation is done.")
-    log.info(s"Review Analysis :: Product level aggregations started.")
+    log.info(s"Per review, computation is done.")
+    log.info(s"Product level aggregations started.")
     val productSentimentInsights = DataProcessing.aggregateToProductLevel(sentimentFactorDF)
     writeData(productSentimentInsights, resultPath)
-    log.info(s"Review Analysis :: All processes are done.")
+    log.info(s"All processes are done.")
   }
 
 }

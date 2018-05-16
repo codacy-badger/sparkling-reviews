@@ -39,9 +39,9 @@ object Trigger extends Logs {
       * application should be 15750 MB = 15.75 GB.
       */
     if (args.length != 2) {
-      log.error(s"Review Analysis :: Number of arguments provided ${args.length}. But expected 2 :- \n" +
-        s"Review Analysis :: 1. Data input path\n" +
-        s"Review Analysis :: 2. Result output path\n")
+      log.error(s"Number of arguments provided ${args.length}. But expected 2 :- \n" +
+        s"1. Data input path\n" +
+        s"2. Result output path\n")
       sys.exit(1)
     } else {
       val dataPath: String = args(0)
@@ -55,7 +55,7 @@ object Trigger extends Logs {
     val hours: Long = TimeUnit.MILLISECONDS.toHours(totalTime)
     val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(totalTime) - TimeUnit.HOURS.toMinutes(hours)
     val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(totalTime) - TimeUnit.MINUTES.toSeconds(minutes)
-    log.info(s"Review Analysis :: Total time taken is $hours:$minutes:$seconds (hours:minutes:seconds).")
+    log.info(s"Total time taken is $hours:$minutes:$seconds (hours:minutes:seconds).")
   }
 
 }

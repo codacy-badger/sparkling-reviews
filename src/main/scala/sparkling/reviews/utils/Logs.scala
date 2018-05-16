@@ -9,7 +9,7 @@ private[sparkling] trait Logs {
     * Setting the applications logging level to warning.
     */
   Logger.getLogger("org").setLevel(Level.ERROR)
-  Logger.getLogger("reviews.analysis").setLevel(Level.WARN)
-  protected val log: Logger = LogManager.getRootLogger
+  Logger.getLogger("product.reviews").setLevel(Level.WARN)
+  protected val log: Logger = LogManager.getLogger("product.reviews")
 
 }

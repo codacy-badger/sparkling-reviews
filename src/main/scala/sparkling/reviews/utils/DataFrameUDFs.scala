@@ -20,6 +20,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf
 import sparkling.reviews.constants.RegexExpressions._
+import sparkling.reviews.constants.SentimentTypes._
 import sparkling.reviews.constants.StringConstants._
 
 /**
@@ -66,8 +67,8 @@ private[sparkling] object DataFrameUDFs {
   def getSentimentValue: UserDefinedFunction =
     udf((input: String) => {
       input match {
-        case "positive" => 1.0
-        case "negative" => -1.0
+        case POSITIVE => 1.0
+        case NEGATIVE => -1.0
       }
     })
 
