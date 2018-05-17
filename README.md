@@ -40,10 +40,6 @@ only 1 year of data (of 2014 only) with few columns renamed. The filtered data c
         ${input_data_path}
         ${path_to_store_the_results}
         
-3. Memory requirement - Considering the [spark default configuration](https://people.apache.org/~pwendell/spark-nightly/spark-master-docs/latest/configuration.html) 
-for `spark.memory.fraction` and `spark.memory.storageFraction`. Calculate the requirements of your system, keeping in mind, 
-multiple very big group bys and joins, which requires huge dataset with various aggregations to be loaded 
-into the memory for processing.
 
 ### License
 

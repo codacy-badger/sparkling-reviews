@@ -32,12 +32,6 @@ object Trigger extends Logs {
 
     val startTime: Long = Instant.now().toEpochMilli
 
-    /**
-      * NOTE:
-      * Main memory allocated to the application should be 3.5 * (Data Size).
-      * If the data size is 4500 MB then the combined memory allocated to the
-      * application should be 15750 MB = 15.75 GB.
-      */
     if (args.length != 2) {
       log.error(s"Number of arguments provided ${args.length}. But expected 2 :- \n" +
         s"1. Data input path\n" +

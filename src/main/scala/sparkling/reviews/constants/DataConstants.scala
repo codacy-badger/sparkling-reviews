@@ -19,21 +19,22 @@ object DataConstants {
   final val CleanText: String = "clean_text"
   final val SentimentValue: String = "sentiment_value"
   final val SentimentFactor: String = "sentiment_factor"
-  final val SentimentCount = "sentiment_count"
+  final val SentimentCount: String = "sentiment_count"
   final val AllSentimentsCounts: String = "all_sentiment_counts"
   final val ReviewKeyWords: String = "key_words"
   final val ProductWordExploded: String = "review_word_exploded"
   final val ProductWordCount: String = "word_count_per_product"
   final val ProductWordRank: String = "word_product_rank"
   final val ListOfKeyWords: String = "list_key_words"
-  final val SentimentCountTuple = "sentiment_count_tuple"
-  final val SentimentCountCollection = "sentiment_count_collection"
+  final val SentimentCountTuple: String = "sentiment_count_tuple"
+  final val SentimentCountCollection: String = "sentiment_count_collection"
 
   /**
     * Final output column names for the result
     */
-  final val ProductSentimentFactor = "product_sentiment_factor"
-  final val ProductSentiment = "product_sentiment"
+  final val ProductSentimentFactor: String = "product_sentiment_factor"
+  final val ProductSentiment: String = "product_sentiment"
+  final val ProductKeyWords: String = "product_key_words"
 
   /**
     * Columns names of JohnSnowLabs outputs

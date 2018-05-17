@@ -113,6 +113,7 @@ private[sparkling] object DataFrameUDFs {
 
   /**
     * Finds which sentiment has the highest count.
+    * Used in "DataProcessing" of the core package.
     *
     * @return [[String]] sentiment with the highest count.
     */

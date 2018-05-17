@@ -90,7 +90,8 @@ private[core] object DataProcessing {
       .agg(max(ProductWordCount) as ProductWordCount)
       .withColumn(ProductWordRank, row_number().over(getProductWordRankWindow))
       .where(col(ProductWordRank) < 11)
-      .drop(ProductWordRank, ProductWordCount)
+      .groupBy(ProductID)
+      .agg(collect_list(ProductWordExploded) as ProductKeyWords)
 
     val resultDF = productSentimentDF.join(productSentimentFactorDF, ProductID)
       .join(productKeyWordsDF, ProductID)
