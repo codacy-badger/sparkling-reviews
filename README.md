@@ -3,8 +3,7 @@
 An application to analyse the user reviews about a product to find the sentiments and to extract some particular 
 attributes so as to define some base for the user construe about the product.
 
-**Currently facing low-performance issues (EXECUTION IS NOT COMPLETING). Number of issues like GC overhead exceeded, and RPC runtime connection failed. 
-Reason for the same might be something related to [spark-nlp](https://github.com/JohnSnowLabs/spark-nlp)**
+**Currently facing low-performance issues (EXECUTION IS NOT COMPLETING). Number of issues like GC overhead exceeded, and java heap space out of memory.**
 
 ### Dependencies
 
@@ -15,6 +14,7 @@ Reason for the same might be something related to [spark-nlp](https://github.com
 
 For sample use, original data of 14 years from the [dataset](http://jmcauley.ucsd.edu/data/amazon/) is filtered to 
 only 1 year of data (of 2014 only) with few columns renamed. The filtered data can be downloaded from [here](https://drive.google.com/open?id=1wy49uyiPYpQkVlYtOR8OlXSx9va2EP5s).
+To execute on a local machine even smaller dataset of only two products can be downloaded from [here](https://drive.google.com/open?id=1My2TNEnLTfkLFBIrwa8vSf1T4ieKeWlG).
 
 ### Building
 
@@ -43,7 +43,7 @@ only 1 year of data (of 2014 only) with few columns renamed. The filtered data c
 
 ### License
 
-[Apache License - v2](https://github.com/Pratik-Barhate/sparkling-reviews/blob/master/LICENSE)
+[Apache License - Version 2.0](https://github.com/Pratik-Barhate/sparkling-reviews/blob/master/LICENSE)
 
 ### Credits
 
